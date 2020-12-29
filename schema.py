@@ -10,13 +10,14 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///user.db'
 engine = create_engine("sqlite:///user.db", echo = True, future = True)
-Session = sessionmaker(bind=engine)
-inspector = inspect(engine)
+# Session = sessionmaker(bind=engine)
 Session = sessionmaker()
 Session.configure(bind=engine)
 session = Session()
-Base = declarative_base()
+inspector = inspect(engine)
 metadata = MetaData(engine)
+Base = declarative_base()
+
 # db = SQLAlchemy(app)
 
 class User(Base):
@@ -31,8 +32,8 @@ class User(Base):
     #     self.fullname = fullname
     #     self.nickname = nickname
 
-    # def __repr__(self):##this is optional to show examples nicely user objects.
-    #     return "<User(name = '%s', fullname = '%s', nickname = '%s')>" % (self.name, self.fullname, self.nickname)
+    def __repr__(self):##this is optional to show examples nicely user objects.
+        return "<User(name = '%s', fullname = '%s', nickname = '%s')>" % (self.name, self.fullname, self.nickname)
 
 class Address(Base):
     __tablename__ = 'addresses'
@@ -45,9 +46,10 @@ class Address(Base):
 
     # # user = relationship('User', back_populates="addresses")
 
-    # def __repr__(self):
-    #     return "<Address(emailer='%s)>" % self.emailer
+    def __repr__(self):
+        return "<Address(emailer='%s)>" % self.emailer
 # User.addresses = relationship("Address", order_by = Address.id, back_populates="users")
+Base.metadata.create_all(engine)
 
 @app.route('/<name>/<fullname>/<nickname>')
 def sign(name, fullname, nickname):
@@ -75,10 +77,10 @@ def index(email_address):
 #     session.commit()
 #     state= {}
 #     start(session, state)
-#     while True:
-#         update_state(session, state)
-#         draw(session, state)
-#         time.sleep(0.01)
+    # while True:
+    #     update_state(session, state)
+    #     draw(session, state)
+    #     time.sleep(0.01)
 # s = select([User.c.name])
 # chris_user = User(name='chris', fullname='Chris Russell', nickname='Popsi')
 # chris = Address(email_address= "chrisr1896.cr@gmail.com")
