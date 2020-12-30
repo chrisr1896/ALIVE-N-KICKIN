@@ -9,8 +9,6 @@ engine = create_engine(
     "sqlite:///user.db", 
     echo = True, 
     future = True,
-    # user_batch_mode=True,
-    # pool_timeout=5,
 )
 
 session = scoped_session(
