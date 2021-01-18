@@ -4,21 +4,31 @@ from flask import Flask
 
 app=Flask(__name__)
 
+def user_serializer(User):
+    return {
+        'id': User.id,
+        'username': User.username
+    }
 
-@app.route('/<name>/<password>')
-def sign_up(name, password):
-    user = User(name=name, password=password)
+@app.route('/', methods=['GET'])
+def index():
+    return jsonify([*map(user_serializer, User.query.all())])
+
+
+@app.route('/api/signup', methods=['POST', 'GET'])
+def sign_up():
+    user = User(name=name, password=password, email_address=email_address)
     session.add(user)
     session.commit()
     return '<h1>Added NEW USER!</h1>'
 
 
-@app.route('/index/<email_address>')
-def index(email_address):
-    email = Address(email_address=email_address)
-    session.add(email)
-    session.commit()
-    return '<h1>ADDED NEW EMAIL!!</h1>'
+# @app.route('/api/email', methods=['POST', 'GET'])
+# def sign_up2():
+#     email = Address(email_address=email_address)
+#     session.add(email)
+#     session.commit()
+#     return '<h1>ADDED NEW EMAIL!!</h1>'
 
 
 if __name__ == "__main__":

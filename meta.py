@@ -2,13 +2,13 @@ import os
 from collections import OrderedDict
 
 from sqlalchemy import create_engine, inspect
-from sqlalchemy.orm import declarative_base, sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.ext.declarative import declarative_base
 
 
 engine = create_engine(
     "sqlite:///user.db", 
     echo = True, 
-    future = True,
 )
 
 session = scoped_session(
