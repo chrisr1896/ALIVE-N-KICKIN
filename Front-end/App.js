@@ -61,7 +61,7 @@ function App() {
         <Router>
           <Switch>
             <Route exact path='/login' component={Login} />
-            <Route exact path="/signup" component={SignUp} onFormChange={handleFormChange} onFormSubmit={handleFormSubmit} /> 
+            <Route exact path="/signup" component={SignUp}  userInput={setAddUser} onFormChange={handleFormChange} onFormSubmit={handleFormSubmit} /> 
           </Switch>
         </Router>
       </Layout>
