@@ -37,4 +37,4 @@ export const Jumbotron = () => {
             </Jumbo>
         </Styles>
     )
-}
+};

@@ -1,6 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-// import axios from 'react-axios';
-import axios from 'axios';
+import { Home } from './component/Home';
 import { Login } from './component/loginPage';
 import { SignUp } from './component/signUp';
 import { Layout } from './component/Layout';
@@ -53,7 +52,6 @@ function App () {
 
 
     const handleFormSubmit = () => {
-      // let {username, email_address, password}=this.state;
       fetch('/api/create', {
         method: 'POST',
         headers:{'Content-Type': 'application/json'},
@@ -76,6 +74,7 @@ function App () {
       <Layout>
         <Router>
           <Switch>
+            <Route exact path ='/home' component={Home} />
             <Route exact path='/login' component={Login} />
             <Route exact path="/signup" component={SignUp} />
           </Switch>

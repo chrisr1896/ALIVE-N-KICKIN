@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { axios } from './axios';
 import '../App.css'
 
+
+// helps with the formatting of the inputs as well
 const formReducer = (state, event) => {
     return {
         ...state,
@@ -9,72 +12,53 @@ const formReducer = (state, event) => {
     }
 }
 
+
+
 export const SignUp = () => {
     const [user, setUser] = useState([]);
     const [formData, setFormData] = useReducer(formReducer, {});
+    
+    // Adds user to the DataBase
+    const addUser = async () => {
+        const response =await axios.post("/api", formData).catch((err) => { 
+            console.log("Error: ", err)});
 
-       useEffect(() => {
-        fetch('/api').then(response =>{
-            if(response.ok){
-                return response.json()
-            }
-        }).then(data => setUser(data))
-    },[]);
+        if(response) getLatestUser();
+    };
 
 
-
+    // formats the input to proper format for inserting into database
     const handleChange = (event) => {
         setFormData({
             name: event.target.name,
             value: event.target.value,        
         })
     };
+
+    // used to refresh signup page to take out whats writting already
+    const getLatestUser = async () => {
+        const response = await axios.get("/api").catch((err) => console.log("Error: ". err))
+        if(response && response.data) setUser(response.data);
+          };
+
+    useEffect(() => {
+        getLatestUser();
+    }, []);
     
+      
 
-    const handleSubmit = (event) => {
-        event.preventDefault(
-            handleFormSubmit()
-        )
-        console.log(formData)
-    };
-
-    const getLatestUser = () => {
-        fetch('/api').then(response => {
-          if(response.ok){
-            return response.json()
-          }
-        }).then(data => setUser(data))
-      };
-
-
-    const handleFormSubmit = () => {
-        // let {username, email_address, password}=this.state;
-       fetch('/api', {
-          method: 'POST',
-          headers:{'Content-Type': 'application/json'},
-          body: JSON.stringify({
-             formData,
-        
-          })
-        }).then(response => response.json()).then(response => {
-          setFormData("")
-          getLatestUser()
-        } );
-        alert("You have Submitted the Form")
-      };
-  
      
     return (
         <div className="login-form">
             <h1 className="font-weight-bold text-center">Sign Up</h1>
-            <Form onSubmit={handleSubmit} >
+            <Form onSubmit={addUser} >
                 <FormGroup >
                     <Label>Username</Label>
-                    <Input type='text' name="username" placeholder='Username' required onChange={handleChange} step="1"/>
+                    <Input type='text' name="username" placeholder='Username' required onChange={handleChange}/>
                 </FormGroup>
                 <FormGroup>
                     <Label>Email</Label>
-                    <Input type='email' name="email" placeholder='Email' required onChange={handleChange} step="2"/>
+                    <Input type='email' name="email" placeholder='Email' required onChange={handleChange} />
                 </FormGroup>
                 <FormGroup>
                     <Label>Password</Label>
@@ -97,7 +81,3 @@ export const SignUp = () => {
         </div>
     );
 };
-// {user.map(users => <p key="users.id">{users.username} {users.email} {users.password}</p>)}
-
-
-// value={userInput}
