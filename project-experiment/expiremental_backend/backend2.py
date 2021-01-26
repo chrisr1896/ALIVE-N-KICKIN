@@ -6,12 +6,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_restful import Api, Resource
 from datetime import datetime
+from flask_cors import CORS, cross_origin
 
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///example.db'
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+CORS(app)
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 session_factory = sessionmaker()
